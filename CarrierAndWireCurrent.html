@@ -1,0 +1,559 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+var show_vectors, I, Q, v, v_mag, v_label, time_label;
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    function round(num, n=0) {return Number(num.toFixed(n))}
+
+    function input(arg) {
+    	arg = arg || {}
+    	if (arg.prompt !== undefined && arg.prompt != '') return prompt(arg.prompt)
+    	else if (typeof arg === 'string') return prompt(arg)
+    	else return prompt()
+    }
+
+    var version, print, arange, __name__, type, ρσ_ls, scene, ρσ_unpack, xlen, ylen, zlen, boundaries, show_vectors, vec_check, mu_0, dt, starting_point, rad, Q, theta, v, v_mag, I, I_vec, v_label, time_label, _GS_1, wire_1, proton, initial_camera_pos, initial_camera_range, key_dict, v_arrow, B_arrow, a_arrow, position;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "7";
+    scene = ρσ_interpolate_kwargs.call(this, display, [ρσ_desugar_kwargs({width: 1500, height: 600})]);
+    "8";
+    ρσ_unpack = [500, 500, 500];
+    xlen = ρσ_unpack[0];
+    ylen = ρσ_unpack[1];
+    zlen = ρσ_unpack[2];
+    "9";
+    boundaries = ρσ_list_decorate([ ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: vector(0, 1["-u"]()["*"](ylen)["/"](2), 0), size: vector(xlen, .2, zlen)})]), ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: vector(0, ylen["/"](2), 0), size: vector(xlen, .2, zlen)})]), ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](xlen)["/"](2), 0, 0), size: vector(.2, ylen, zlen)})]), ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: vector(0, 0, 1["-u"]()["*"](zlen)["/"](2)), size: vector(xlen, ylen, .2)})]) ]);
+    "18";
+    async function launch() {
+        "19";
+        (await proton.reset_proton());
+        "20";
+        while (true) {
+            "21";
+            (await rate(1["/"](dt)));
+            "22";
+            (await proton.move());
+            "23";
+            (await proton.check_collision_bounce());
+        }
+    };
+    if (!launch.__module__) Object.defineProperties(launch, {
+        __module__ : {value: null}
+    });
+
+    "25";
+    scene.append_to_caption("WASD: rotate camera.\tE: Launch.\t T and G: Follow-Unfollow carrier.\tR: Reset camera.");
+    "27";
+    show_vectors = false;
+    "28";
+    scene.append_to_caption("\n\n");
+    "29";
+    async function vector_arrow(show) {
+        "30";
+        "31";
+        show_vectors = show.checked;
+    };
+    if (!vector_arrow.__argnames__) Object.defineProperties(vector_arrow, {
+        __argnames__ : {value: ["show"]},
+        __module__ : {value: null}
+    });
+
+    "32";
+    vec_check = ρσ_interpolate_kwargs.call(this, checkbox, [ρσ_desugar_kwargs({text: "Show Vectors (Blue = B, Yellow = Velocity, Green = Force)", bind: vector_arrow, checked: false})]);
+    "35";
+    mu_0 = 4["*"](pi)["*"](Math.pow(10, (1["-u"]()["*"](7))));
+    "36";
+    dt = .01;
+    "39";
+    starting_point = vector(1["-u"]()["*"](xlen)["/"](3), 1["-u"]()["*"](ylen)["/"](5), 0);
+    "40";
+    rad = 3;
+    "41";
+    Q = 300;
+    "42";
+    theta = pi["/"](4);
+    "43";
+    v = vector(13, 25, 2);
+    "44";
+    v_mag = sqrt(Math.pow(v.x, 2)["+"](Math.pow(v.y, 2))["+"](Math.pow(v.z, 2)));
+    "45";
+    I = 2["*"](Math.pow(10, 6));
+    "46";
+    I_vec = vec(I, 0, 0);
+    "49";
+    async function change_current(evt) {
+        "50";
+        "51";
+        I = evt.number;
+    };
+    if (!change_current.__argnames__) Object.defineProperties(change_current, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "52";
+    async function change_charge(evt) {
+        "53";
+        "54";
+        Q = evt.number;
+    };
+    if (!change_charge.__argnames__) Object.defineProperties(change_charge, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "56";
+    async function change_x_velocity(evt) {
+        "57";
+        "58";
+        v.x = evt.number;
+        "59";
+        v_mag = sqrt(Math.pow(v.x, 2)["+"](Math.pow(v.y, 2))["+"](Math.pow(v.z, 2)));
+        "60";
+        v_label.text = str(v_mag);
+        "61";
+        print(v, v_mag);
+    };
+    if (!change_x_velocity.__argnames__) Object.defineProperties(change_x_velocity, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "62";
+    async function change_y_velocity(evt) {
+        "63";
+        "64";
+        v.y = evt.number;
+        "65";
+        v_mag = sqrt(Math.pow(v.x, 2)["+"](Math.pow(v.y, 2))["+"](Math.pow(v.z, 2)));
+        "66";
+        print(v, v_mag);
+    };
+    if (!change_y_velocity.__argnames__) Object.defineProperties(change_y_velocity, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "67";
+    async function change_z_velocity(evt) {
+        "68";
+        "69";
+        v.z = evt.number;
+        "70";
+        v_mag = sqrt(Math.pow(v.x, 2)["+"](Math.pow(v.y, 2))["+"](Math.pow(v.z, 2)));
+        "71";
+        print(v, v_mag);
+    };
+    if (!change_z_velocity.__argnames__) Object.defineProperties(change_z_velocity, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "72";
+    async function change_velocity(evt) {
+        var ρσ_ls, v_hat, v_mag;
+        "73";
+        "74";
+        v_hat = hat(proton.v);
+        "75";
+        v_mag = evt.number;
+        "76";
+        v = v_hat["*"](v_mag);
+        "77";
+        print(v, v_mag);
+    };
+    if (!change_velocity.__argnames__) Object.defineProperties(change_velocity, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "79";
+    scene.append_to_caption("\n\nChange variables [Press ENTER]:\n");
+    (await sleep(.1));
+    "80";
+    ρσ_interpolate_kwargs.call(this, winput, [ρσ_desugar_kwargs({prompt: "Current (A):\t", bind: change_current, type: "numeric", text: str(I)})]);
+    (await sleep(.1));
+    "81";
+    ρσ_interpolate_kwargs.call(this, winput, [ρσ_desugar_kwargs({prompt: "\nCharge (C):\t", bind: change_charge, type: "numeric", text: str(Q)})]);
+    "82";
+    scene.append_to_caption("\nChange STARTING velocity (m/s):\t");
+    (await sleep(.1));
+    "83";
+    ρσ_interpolate_kwargs.call(this, winput, [ρσ_desugar_kwargs({prompt: "x-component:", bind: change_x_velocity, type: "numeric", width: 50, text: str(v.x)})]);
+    (await sleep(.1));
+    "84";
+    ρσ_interpolate_kwargs.call(this, winput, [ρσ_desugar_kwargs({prompt: "y-component:", bind: change_y_velocity, type: "numeric", width: 50, text: str(v.y)})]);
+    (await sleep(.1));
+    "85";
+    ρσ_interpolate_kwargs.call(this, winput, [ρσ_desugar_kwargs({prompt: "z-component:", bind: change_z_velocity, type: "numeric", width: 50, text: str(v.z)})]);
+    (await sleep(.1));
+    "86";
+    v_label = ρσ_interpolate_kwargs.call(this, winput, [ρσ_desugar_kwargs({prompt: "Magnitude (|v|):", bind: change_velocity, type: "numeric", width: 50, text: str(v_mag)})]);
+    "89";
+    time_label = ρσ_interpolate_kwargs.call(this, label, [ρσ_desugar_kwargs({pos: vec(0, 0, 0), text: "0 s", xoffset: 250, yoffset: 250, space: 30, height: 16, border: 4, font: "sans"})]);
+    "91";
+    function create_wire() {;
+    }
+    create_wire.prototype.__init__ = async function __init__(I, rad) {
+        var self = this;
+        "93";
+        self.I = I;
+        "94";
+        self.rad = rad;
+        "95";
+        self.wire = ρσ_interpolate_kwargs.call(this, cylinder, [ρσ_desugar_kwargs({pos: vec(1["-u"]()["*"](xlen)["/"](2), 0, 0), axis: vec(xlen, 0, 0), radius: rad, color: vector(1, .7, .2)})]);
+    };
+    if (!create_wire.prototype.__init__.__argnames__) Object.defineProperties(create_wire.prototype.__init__, {
+        __argnames__ : {value: ["I", "rad"]},
+        __module__ : {value: null}
+    });
+    create_wire.__argnames__ = create_wire.prototype.__init__.__argnames__;
+    create_wire.__handles_kwarg_interpolation__ = create_wire.prototype.__init__.__handles_kwarg_interpolation__;
+    create_wire.prototype.__repr__ = async function __repr__() {
+                return "<"["+"](__name__)["+"](".")["+"](this.constructor.name)["+"](" #")["+"](this.ρσ_object_id)["+"](">");
+    };
+    create_wire.prototype.__str__ = async function __str__() {
+        return this.__repr__();
+    };
+    Object.defineProperty(create_wire.prototype, "__bases__", {value: []});
+    
+
+    "96";
+    _GS_1 = new create_wire;
+    ρσ_interpolate_kwargs.call(_GS_1, _GS_1.__init__, [ρσ_desugar_kwargs({I: 2, rad: rad})]);
+    wire_1 = _GS_1;
+    "99";
+    function create_proton() {;
+    }
+    create_proton.prototype.__init__ = async function __init__(v) {
+        var self = this;
+        "101";
+        self.v = v;
+        "102";
+        self.proton = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: starting_point, color: color.red, radius: 1, make_trail: true, trail_type: "curve"})]);
+        "103";
+        self.a = vector(0, 0, 0);
+        "104";
+        self.dist = sqrt(Math.pow((wire_1.wire.pos.z["-"](1["*"](self.proton.pos.z))), 2)["+"](Math.pow((wire_1.wire.pos.y["-"](1["*"](self.proton.pos.y))), 2)));
+        "105";
+        self.r = vec(wire_1.wire.pos.x["-"](1["*"](self.proton.pos.x)), wire_1.wire.pos.y["-"](1["*"](self.proton.pos.y)), wire_1.wire.pos.z["-"](1["*"](self.proton.pos.z)));
+        "106";
+        self.B = cross(hat(self.r), hat(I_vec))["*"](mu_0)["*"](I)["/"](2["*"](pi)["*"](self.dist));
+    };
+    if (!create_proton.prototype.__init__.__argnames__) Object.defineProperties(create_proton.prototype.__init__, {
+        __argnames__ : {value: ["v"]},
+        __module__ : {value: null}
+    });
+    create_proton.__argnames__ = create_proton.prototype.__init__.__argnames__;
+    create_proton.__handles_kwarg_interpolation__ = create_proton.prototype.__init__.__handles_kwarg_interpolation__;
+    create_proton.prototype.move = async function move() {
+        var self = this;
+        "109";
+        "110";
+        self.a = Q["*"](cross(self.v, self.B));
+        "111";
+        self.v=self.v["+"](self.a["*"](dt));
+        "112";
+        self.proton.pos=self.proton.pos["+"](self.v["*"](dt));
+        "113";
+        self.dist = sqrt(Math.pow(abs(wire_1.wire.pos.z["-"](1["*"](self.proton.pos.z))), 2)["+"](Math.pow(abs(wire_1.wire.pos.y["-"](1["*"](self.proton.pos.y))), 2)));
+        "114";
+        self.r = vec(wire_1.wire.pos.x["-"](1["*"](self.proton.pos.x)), wire_1.wire.pos.y["-"](1["*"](self.proton.pos.y)), wire_1.wire.pos.z["-"](1["*"](self.proton.pos.z)));
+        "115";
+        self.B = cross(hat(self.r), hat(I_vec))["*"](mu_0)["*"](I)["/"](2["*"](pi)["*"](self.dist));
+        "116";
+        time_label.text = str(round(float(time_label.text.slice(0, 1["-u"]()["*"](2)))["+"](dt), 4))["+"](" s");
+    };
+    if (!create_proton.prototype.move.__module__) Object.defineProperties(create_proton.prototype.move, {
+        __module__ : {value: null}
+    });
+    create_proton.prototype.reset_proton = async function reset_proton() {
+        var self = this;
+        "119";
+        "120";
+        time_label.text = "0 s";
+        "121";
+        self.proton.pos = starting_point;
+        "122";
+        self.v = v;
+        "123";
+        self.proton.clear_trail();
+        "124";
+        self.a = vector(0, 0, 0);
+        "125";
+        self.r = vec(wire_1.wire.pos.x["-"](1["*"](self.proton.pos.x)), wire_1.wire.pos.y["-"](1["*"](self.proton.pos.y)), wire_1.wire.pos.z["-"](1["*"](self.proton.pos.z)));
+        "126";
+        self.B = cross(hat(self.r), hat(I_vec))["*"](mu_0)["*"](I)["/"](2["*"](pi)["*"](self.dist));
+    };
+    if (!create_proton.prototype.reset_proton.__module__) Object.defineProperties(create_proton.prototype.reset_proton, {
+        __module__ : {value: null}
+    });
+    create_proton.prototype.check_collision_bounce = async function check_collision_bounce() {
+        var self = this;
+        "129";
+        if (self.proton.pos.y[">="](ylen["/"](2))) {
+            "130";
+            self.v.y = 1["-u"]()["*"](self.v.y);
+            "131";
+        }
+        if (self.proton.pos.y["<="](1["-u"]()["*"](ylen)["/"](2))) {
+            "132";
+            self.v.y = 1["-u"]()["*"](self.v.y);
+            "133";
+        }
+        if (self.proton.pos.x[">="](xlen["/"](2))) {
+            "134";
+            self.v.x = 1["-u"]()["*"](self.v.x);
+            "135";
+        }
+        if (self.proton.pos.x["<="](1["-u"]()["*"](xlen)["/"](2))) {
+            "136";
+            self.v.x = 1["-u"]()["*"](self.v.x);
+            "137";
+        }
+        if (self.proton.pos.z[">="](zlen["/"](2))) {
+            "138";
+            self.v.z = 1["-u"]()["*"](self.v.z);
+            "139";
+        }
+        if (self.proton.pos.z["<="](1["-u"]()["*"](zlen)["/"](2))) {
+            "140";
+            self.v.z = 1["-u"]()["*"](self.v.z);
+        }
+    };
+    if (!create_proton.prototype.check_collision_bounce.__module__) Object.defineProperties(create_proton.prototype.check_collision_bounce, {
+        __module__ : {value: null}
+    });
+    create_proton.prototype.__repr__ = async function __repr__() {
+                return "<"["+"](__name__)["+"](".")["+"](this.constructor.name)["+"](" #")["+"](this.ρσ_object_id)["+"](">");
+    };
+    create_proton.prototype.__str__ = async function __str__() {
+        return this.__repr__();
+    };
+    Object.defineProperty(create_proton.prototype, "__bases__", {value: []});
+    
+    
+    
+    
+
+    "142";
+    _GS_1 = new create_proton;
+    (await _GS_1.__init__(v));
+    proton = _GS_1;
+    "145";
+    initial_camera_pos = scene.camera.pos;
+    "146";
+    initial_camera_range = scene.range;
+    "147";
+    async function reset_camera() {
+        "148";
+        scene.camera.pos = initial_camera_pos;
+        "149";
+        scene.center = vec(0, 0, 0);
+        "150";
+        scene.forward = vec(0, 0, 1["-u"]()["*"](1));
+        "151";
+        scene.up = vec(0, 1, 0);
+        "152";
+        scene.range = intial_camera_range;
+    };
+    if (!reset_camera.__module__) Object.defineProperties(reset_camera, {
+        __module__ : {value: null}
+    });
+
+    "153";
+    async function rotate_left() {
+        "154";
+        ρσ_interpolate_kwargs.call(scene.camera, scene.camera.rotate, [ρσ_desugar_kwargs({angle: 1["-u"]()["*"](5)["*"](pi)["/"](180), axis: vector(0, 1, 0), origin: vector(0, 0, 0)})]);
+    };
+    if (!rotate_left.__module__) Object.defineProperties(rotate_left, {
+        __module__ : {value: null}
+    });
+
+    "155";
+    async function rotate_right() {
+        "156";
+        ρσ_interpolate_kwargs.call(scene.camera, scene.camera.rotate, [ρσ_desugar_kwargs({angle: 5["*"](pi)["/"](180), axis: vector(0, 1, 0), origin: vector(0, 0, 0)})]);
+    };
+    if (!rotate_right.__module__) Object.defineProperties(rotate_right, {
+        __module__ : {value: null}
+    });
+
+    "157";
+    async function rotate_up() {
+        "158";
+        ρσ_interpolate_kwargs.call(scene.camera, scene.camera.rotate, [ρσ_desugar_kwargs({angle: 1["-u"]()["*"](5)["*"](pi)["/"](180), axis: vector(1, 0, 0), origin: vector(0, 0, 0)})]);
+    };
+    if (!rotate_up.__module__) Object.defineProperties(rotate_up, {
+        __module__ : {value: null}
+    });
+
+    "159";
+    async function rotate_down() {
+        "160";
+        ρσ_interpolate_kwargs.call(scene.camera, scene.camera.rotate, [ρσ_desugar_kwargs({angle: 5["*"](pi)["/"](180), axis: vector(1, 0, 0), origin: vector(0, 0, 0)})]);
+    };
+    if (!rotate_down.__module__) Object.defineProperties(rotate_down, {
+        __module__ : {value: null}
+    });
+
+    "161";
+    async function follow_() {
+        "162";
+        scene.camera.follow(proton.proton);
+    };
+    if (!follow_.__module__) Object.defineProperties(follow_, {
+        __module__ : {value: null}
+    });
+
+    "163";
+    async function unfollow_() {
+        "164";
+        scene.camera.follow(null);
+    };
+    if (!unfollow_.__module__) Object.defineProperties(unfollow_, {
+        __module__ : {value: null}
+    });
+
+    "167";
+    key_dict = (function(){
+        var ρσ_d = ρσ_dict();
+        ρσ_d.set("s", rotate_down);
+        ρσ_d.set("w", rotate_up);
+        ρσ_d.set("d", rotate_right);
+        ρσ_d.set("a", rotate_left);
+        ρσ_d.set("r", reset_camera);
+        ρσ_d.set("t", follow_);
+        ρσ_d.set("g", unfollow_);
+        ρσ_d.set("e", launch);
+        return ρσ_d;
+    }).call(this);
+    "168";
+    async function keyInput(evt) {
+        var ρσ_ls, k;
+        "169";
+        k = evt.key;
+        "170";
+        if (ρσ_in(k, key_dict)) {
+            "171";
+            ρσ_getitem(key_dict, k)();
+        }
+    };
+    if (!keyInput.__argnames__) Object.defineProperties(keyInput, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "172";
+    scene.bind("keydown", keyInput);
+    "175";
+    ρσ_unpack = [ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: vec(0, 0, 0), axis: vec(0, 0, 0), opacity: 0})]), 
+    ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: vec(0, 0, 0), axis: vec(0, 0, 0), opacity: 0})]), 
+    ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: vec(0, 0, 0), axis: vec(0, 0, 0), opacity: 0})])];
+    v_arrow = ρσ_unpack[0];
+    B_arrow = ρσ_unpack[1];
+    a_arrow = ρσ_unpack[2];
+    "176";
+    while (true) {
+        "177";
+        (await rate(1["/"](dt)));
+        "178";
+        if (show_vectors) {
+            "179";
+            position = proton.proton.pos;
+            "180";
+            ρσ_unpack = [position, hat(proton.v)["*"](10), color.yellow, 1];
+            v_arrow.pos = ρσ_unpack[0];
+            v_arrow.axis = ρσ_unpack[1];
+            v_arrow.color = ρσ_unpack[2];
+            v_arrow.opacity = ρσ_unpack[3];
+            "181";
+            ρσ_unpack = [position, hat(proton.B)["*"](10), color.blue, 1];
+            B_arrow.pos = ρσ_unpack[0];
+            B_arrow.axis = ρσ_unpack[1];
+            B_arrow.color = ρσ_unpack[2];
+            B_arrow.opacity = ρσ_unpack[3];
+            "182";
+            ρσ_unpack = [position, hat(proton.a)["*"](10), color.green, 1];
+            a_arrow.pos = ρσ_unpack[0];
+            a_arrow.axis = ρσ_unpack[1];
+            a_arrow.color = ρσ_unpack[2];
+            a_arrow.opacity = ρσ_unpack[3];
+            "184";
+        } else {
+            "185";
+            v_arrow.opacity = 0;
+            "186";
+            B_arrow.opacity = 0;
+            "187";
+            a_arrow.opacity = 0;
+        }
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>
